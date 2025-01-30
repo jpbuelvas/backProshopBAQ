@@ -11,11 +11,12 @@ export class WompiController {
 
   @Post('integrity-signature')
   getIntegritySignature(@Body() IntegritySignature: IntegritySignatureDTO) {
-    console.log(IntegritySignature,"IntegritySignature")
     return this.WompiService.getIntegritySignature(
       IntegritySignature.reference,
       IntegritySignature.amountInCents,
       IntegritySignature.currency,
     );
   }
+ 
+
 }

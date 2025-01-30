@@ -4,31 +4,26 @@ import * as crypto from 'crypto';
 import axios from 'axios';
 
 @Injectable()
-export class WompiService {
+export  class WompiService {
   private readonly integritySecret: string;
   private readonly privateKey: string;
 
   constructor(private configService: ConfigService) {
-    this.integritySecret = this.configService.get<string>(
-      'WOMPI_INTEGRITY_SECRET',
-    );
+    this.integritySecret = this.configService.get<string>('WOMPI_INTEGRITY_SECRET');
     this.privateKey = this.configService.get<string>('WOMPI_PRIVATE_KEY');
   }
 
-  getIntegritySignature(
-    reference: string,
-    amountInCents: number,
-    currency: string,
-  ) {
+  getIntegritySignature(reference: string, amountInCents: number, currency: string) {
     const signatureString = `${reference}${amountInCents}${currency}${this.integritySecret}`;
-    console.log(signatureString,"signatureString")
+    console.log(signatureString, 'signatureString');
     const integritySignature = crypto
       .createHash('sha256')
       .update(signatureString)
       .digest('hex');
-      console.log(integritySignature,"integritySignature")
+    console.log(integritySignature, 'integritySignature');
     return integritySignature;
   }
+
   async getTransactionStatus(transactionId: string) {
     try {
       const response = await axios.get(
@@ -39,17 +34,10 @@ export class WompiService {
       );
       return response.data;
     } catch (error) {
-      // Log detallado del error para depuración
       console.error('Error fetching transaction status:', error.message);
-
-      // Manejo específico según el tipo de error
       if (axios.isAxiosError(error)) {
-        const status =
-          error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
-        const message =
-          error.response?.data?.error?.message || 'Unexpected error';
-
-        // Lanza una excepción personalizada para el cliente
+        const status = error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR;
+        const message = error.response?.data?.error?.message || 'Unexpected error';
         throw new HttpException(
           {
             statusCode: status,
@@ -59,16 +47,14 @@ export class WompiService {
           status,
         );
       }
-
-      // Manejo de otros tipos de errores
       throw new HttpException(
         {
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-          message:
-            'An unexpected error occurred while fetching the transaction status',
+          message: 'An unexpected error occurred while fetching the transaction status',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
+
 }

@@ -4,6 +4,7 @@ import { WompiService } from './wompi.service';
 
 @Module({
   controllers: [WompiController],
-  providers: [WompiService]
+  providers: [WompiService],
+  exports: [WompiService], // Asegúrate de exportarlo
 })
 export class WompiModule {}

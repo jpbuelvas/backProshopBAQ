@@ -1,12 +1,12 @@
-import { Body, Controller, Get, Post,Param,Query} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { WompiService } from './wompi.service';
-import { IntegritySignatureDTO,transactionIdDTO } from './dto/wompi.dto';
+import { IntegritySignatureDTO, transactionIdDTO } from './dto/wompi.dto';
 @Controller('wompi')
 export class WompiController {
   constructor(private WompiService: WompiService) {}
   @Get('transaction-status')
   getTransactionStatus(@Query() transactionId: transactionIdDTO) {
-        return this.WompiService.getTransactionStatus(transactionId.id);
+    return this.WompiService.getTransactionStatus(transactionId.id);
   }
 
   @Post('integrity-signature')
@@ -17,6 +17,4 @@ export class WompiController {
       IntegritySignature.currency,
     );
   }
- 
-
 }

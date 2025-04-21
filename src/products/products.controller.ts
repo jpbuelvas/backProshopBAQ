@@ -26,6 +26,16 @@ export class ProductsController {
     // Enviar el pedido actualizado al servicio de base de datos
     return this.ProductsService.registerOrderFromFrontend(pedidoData);
   }
-  
+
+  @Get('search')
+  async searchInventory(@Query('query') query: string) {
+    const products = await this.getchProducts();
+    // Filtra los productos que contengan el término de búsqueda en nombre o descripción
+    const filtered = products.filter((p: any) => {
+      const combined = `${p.nombre} ${p.descripcion} ${p.tallas}`.toLowerCase();
+      return combined.includes(query.toLowerCase());
+    });
+    return filtered;
+  }
   
 }

@@ -7,5 +7,6 @@ import { WompiModule } from '../wompi/wompi.module'; // Importamos el módulo Wo
   imports: [WompiModule], // IMPORTANTE: Importamos el módulo que tiene WompiService
   controllers: [ProductsController],
   providers: [ProductsService],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
